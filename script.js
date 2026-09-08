@@ -1,89 +1,12 @@
-const TENORS = [3, 4, 5, 6, 10, 12];
-const MONTHLY_MARGIN = 0.012;
-
-const form = document.querySelector('#simulation-form');
-const input = document.querySelector('#amount');
-const amountWrap = document.querySelector('#amount-wrap');
-const errorMessage = document.querySelector('#amount-error');
-const results = document.querySelector('#results');
-const tableBody = document.querySelector('#result-body');
-const cards = document.querySelector('#tenor-cards');
-const summaryAmount = document.querySelector('#summary-amount');
-
-const rupiah = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  maximumFractionDigits: 0
-});
-
-function parseAmount(value) {
-  return Number(value.replace(/\D/g, '')) || 0;
-}
-
-function formatInput(value) {
-  const amount = parseAmount(value);
-  return amount ? new Intl.NumberFormat('id-ID').format(amount) : '';
-}
-
-function calculate(amount, tenor) {
-  const margin = Math.round(amount * MONTHLY_MARGIN * tenor);
-  const total = amount + margin;
-  const monthly = Math.ceil((total / tenor) / 1000) * 1000;
-  return { margin, total, monthly };
-}
-
-function tableRow(amount, tenor) {
-  const { margin, total, monthly } = calculate(amount, tenor);
-  return `<tr>
-    <td>${tenor} bulan</td>
-    <td>${rupiah.format(amount)}</td>
-    <td>${rupiah.format(margin)}</td>
-    <td>${rupiah.format(total)}</td>
-    <td>${rupiah.format(monthly)}</td>
-  </tr>`;
-}
-
-function tenorCard(amount, tenor) {
-  const { margin, total, monthly } = calculate(amount, tenor);
-  return `<article class="tenor-card">
-    <div class="tenor-card-top">
-      <span class="tenor-badge">${tenor} bulan</span>
-      <div class="monthly"><small>Cicilan / bulan</small><strong>${rupiah.format(monthly)}</strong></div>
-    </div>
-    <div class="card-row"><span>Pokok pembiayaan</span><strong>${rupiah.format(amount)}</strong></div>
-    <div class="card-row"><span>Margin</span><strong>${rupiah.format(margin)}</strong></div>
-    <div class="card-row"><span>Total pembayaran</span><strong>${rupiah.format(total)}</strong></div>
-  </article>`;
-}
-
-function showError(message) {
-  errorMessage.textContent = message;
-  amountWrap.classList.toggle('invalid', Boolean(message));
-  input.setAttribute('aria-invalid', Boolean(message).toString());
-}
-
-input.addEventListener('input', () => {
-  input.value = formatInput(input.value);
-  showError('');
-});
-
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const amount = parseAmount(input.value);
-
-  if (amount < 1000) {
-    showError('Masukkan nominal minimal Rp1.000.');
-    results.hidden = true;
-    input.focus();
-    return;
-  }
-
-  showError('');
-  summaryAmount.textContent = rupiah.format(amount);
-  tableBody.innerHTML = TENORS.map((tenor) => tableRow(amount, tenor)).join('');
-  cards.innerHTML = TENORS.map((tenor) => tenorCard(amount, tenor)).join('');
-  results.hidden = false;
-  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
-
-document.querySelector('#year').textContent = new Date().getFullYear();
+const TENORS=[3,4,5,6,10,12],RATE=.012;
+const CONTENT={murabahah:{eyebrow:'Akad jual beli',title:'Simulasi Murabahah',description:'Masukkan harga barang untuk melihat estimasi pembayaran pada setiap pilihan jangka waktu.',label:'Harga barang',summary:'Harga barang'},qardhul:{eyebrow:'Khusus biaya pendidikan',title:'Simulasi Qardhul Hasan',description:'Pembiayaan kebajikan tanpa margin untuk membantu memenuhi kebutuhan biaya pendidikan.',label:'Nominal pembiayaan',summary:'Biaya pendidikan'},rahn:{eyebrow:'Akad gadai syariah',title:'Simulasi Rahn',description:'Masukkan nominal pembiayaan dan masa Rahn untuk membandingkan dua skema pengembalian.',label:'Nominal pembiayaan',summary:'Total pembiayaan'}};
+let akad='murabahah';const $=s=>document.querySelector(s),form=$('#simulation-form'),input=$('#amount'),results=$('#results');const rp=new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}),num=new Intl.NumberFormat('id-ID');
+const money=v=>rp.format(Math.round(v)),parse=v=>Number(v.replace(/\D/g,''))||0,round=v=>Math.ceil(v/1000)*1000;
+function standard(amount,tenor){const margin=akad==='murabahah'?Math.round(amount*RATE*tenor):0,total=amount+margin;return{margin,total,monthly:round(total/tenor)}}
+function renderStandard(amount){$('#result-body').innerHTML=TENORS.map(t=>{const d=standard(amount,t);return `<tr><td>${t} bulan</td><td>${money(amount)}</td><td>${money(d.margin)}</td><td>${money(d.total)}</td><td>${money(d.monthly)}</td></tr>`}).join('');$('#tenor-cards').innerHTML=TENORS.map(t=>{const d=standard(amount,t);return `<article class="tenor-card"><div class="tenor-card-top"><span class="tenor-badge">${t} bulan</span><div class="monthly"><small>Cicilan / bulan</small><strong>${money(d.monthly)}</strong></div></div><div class="card-row"><span>Pokok pembiayaan</span><strong>${money(amount)}</strong></div><div class="card-row"><span>Margin</span><strong>${money(d.margin)}</strong></div><div class="card-row"><span>Total pembayaran</span><strong>${money(d.total)}</strong></div></article>`}).join('')}
+function rahnData(amount,tenor,scheme){const installment=amount/tenor;let remaining=amount,totalUjrah=0,rows='';for(let m=1;m<=tenor;m++){const ujrah=Math.round(remaining*RATE),principal=scheme==='installment'?(m===tenor?remaining:installment):(m===tenor?amount:0);totalUjrah+=ujrah;rows+=`<tr><td>Angsuran ke-${m}</td><td>${money(principal)}</td><td>${money(ujrah)}</td><td>${money(principal+ujrah)}</td></tr>`;if(scheme==='installment')remaining=Math.max(0,remaining-principal)}return{rows,totalUjrah,total:amount+totalUjrah}}
+function rahnTable(amount,tenor,scheme){const d=rahnData(amount,tenor,scheme),title=scheme==='installment'?'Skema pokok diangsur':'Skema ujrah bulanan',note=scheme==='installment'?'Ujrah menurun mengikuti sisa pokok':'Pokok dilunasi pada bulan terakhir';return `<div class="rahn-table-card"><div class="scheme-title"><span>${title}</span><small>${note}</small></div><div class="table-wrap"><table><thead><tr><th>Jatuh tempo</th><th>Pengembalian pokok</th><th>Ujrah</th><th>Total dibayar</th></tr></thead><tbody>${d.rows}<tr class="total-row"><td>Total</td><td>${money(amount)}</td><td>${money(d.totalUjrah)}</td><td>${money(d.total)}</td></tr></tbody></table></div></div>`}
+function renderRahn(amount){const tenor=Number($('#rahn-tenor').value),item=$('#item-name').value.trim();$('#rahn-meta').innerHTML=`${item?`<span><small>Barang gadai</small><strong>${item}</strong></span>`:''}<span><small>Masa Rahn</small><strong>${tenor} bulan</strong></span>`;$('#scheme-installment').innerHTML=rahnTable(amount,tenor,'installment');$('#scheme-ujrah-only').innerHTML=rahnTable(amount,tenor,'ujrah-only')}
+function setAkad(value){akad=value;const c=CONTENT[value];document.querySelectorAll('.akad-tab').forEach(t=>t.classList.toggle('active',t.dataset.akad===value));$('#intro-eyebrow').textContent=c.eyebrow;$('#form-title').textContent=c.title;$('#intro-description').textContent=c.description;$('#amount-label').textContent=c.label;$('#item-field').hidden=value!=='rahn';$('#tenor-field').hidden=value!=='rahn';input.placeholder=value==='rahn'?'7.200.000':'10.000.000';input.value='';results.hidden=true}
+document.querySelectorAll('.akad-tab').forEach(t=>t.addEventListener('click',()=>setAkad(t.dataset.akad)));document.querySelectorAll('.scheme-button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.scheme-button').forEach(x=>x.classList.toggle('active',x===b));$('#scheme-installment').hidden=b.dataset.scheme!=='installment';$('#scheme-ujrah-only').hidden=b.dataset.scheme!=='ujrah-only'}));
+input.addEventListener('input',()=>{const v=parse(input.value);input.value=v?num.format(v):'';$('#amount-error').textContent='';$('#amount-wrap').classList.remove('invalid')});form.addEventListener('submit',e=>{e.preventDefault();const amount=parse(input.value);if(amount<1000){$('#amount-error').textContent='Masukkan nominal minimal Rp1.000.';$('#amount-wrap').classList.add('invalid');results.hidden=true;return}const isRahn=akad==='rahn';$('#result-title').textContent=isRahn?'Rincian Pembayaran Rahn':'Perkiraan Pembayaran';$('#summary-label').textContent=CONTENT[akad].summary;$('#summary-amount').textContent=money(amount);$('#standard-results').hidden=isRahn;$('#rahn-results').hidden=!isRahn;isRahn?renderRahn(amount):renderStandard(amount);results.hidden=false;results.scrollIntoView({behavior:'smooth',block:'start'})});$('#year').textContent=new Date().getFullYear();

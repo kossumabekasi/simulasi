@@ -1,6 +1,6 @@
-# Simulasi Pembiayaan Murabahah Kossuma
+# Simulasi Pembiayaan Kossuma
 
-Web statis sederhana untuk menghitung simulasi pembiayaan murabahah dengan margin tetap 1,2% per bulan.
+Web statis untuk menghitung simulasi tiga akad pembiayaan Kossuma: Murabahah, Qardhul Hasan khusus biaya pendidikan, dan Rahn dengan dua skema pembayaran.
 
 ## Cara menjalankan
 
@@ -16,10 +16,11 @@ Buka `index.html` langsung di browser. Tidak membutuhkan server, database, atau 
 
 GitHub akan memberikan tautan publik setelah proses deployment selesai.
 
-## Rumus
+## Jenis simulasi
 
-- Margin = pokok pembiayaan × 1,2% × tenor
-- Total pembayaran = pokok pembiayaan + margin
-- Cicilan per bulan = total pembayaran ÷ tenor, dibulatkan ke atas ke kelipatan Rp1.000
+- Murabahah: margin tetap 1,2% per bulan.
+- Qardhul Hasan: tanpa margin.
+- Rahn pokok diangsur: ujrah 1,2% dihitung dari sisa pokok setiap bulan.
+- Rahn ujrah bulanan: ujrah 1,2% dibayar per bulan dan pokok dikembalikan pada bulan terakhir.
 
 Pilihan tenor: 3, 4, 5, 6, 10, dan 12 bulan.

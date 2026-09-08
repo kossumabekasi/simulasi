@@ -33,6 +33,16 @@ button, input { font: inherit; }
 .brand p { margin: 0 0 4px; color: var(--green); font-size: .84rem; font-weight: 750; }
 .brand h1 { margin: 0; font-size: clamp(1.25rem, 3vw, 1.85rem); letter-spacing: -.035em; }
 
+.akad-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+.akad-tab { display: flex; align-items: center; gap: 12px; width: auto; padding: 14px 16px; color: var(--ink); text-align: left; background: rgba(255,255,255,.86); border: 1px solid var(--line); box-shadow: none; }
+.akad-tab:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(67,27,78,.09); }
+.akad-tab.active { color: var(--white); border-color: var(--purple); background: linear-gradient(135deg,var(--purple),#762394); box-shadow: 0 10px 24px rgba(83,20,111,.2); }
+.tab-icon { display: grid; place-items: center; flex: 0 0 38px; width: 38px; height: 38px; border-radius: 12px; color: var(--purple); background: var(--purple-soft); font-weight: 900; }
+.akad-tab.active .tab-icon { color: var(--white); background: rgba(255,255,255,.18); }
+.akad-tab strong,.akad-tab small { display: block; }
+.akad-tab small { margin-top: 2px; color: var(--muted); font-size: .72rem; font-weight: 600; }
+.akad-tab.active small { color: rgba(255,255,255,.76); }
+
 .calculator, .results {
   background: rgba(255,255,255,.93);
   border: 1px solid rgba(83, 20, 111, .10);
@@ -47,6 +57,10 @@ button, input { font: inherit; }
 
 form { align-self: center; }
 form label { display: block; margin-bottom: 9px; font-size: .9rem; font-weight: 800; }
+form label span { color: var(--muted); font-weight: 500; }
+.field { margin-bottom: 15px; }
+.text-field { width: 100%; border: 2px solid var(--line); border-radius: 14px; outline: none; padding: 14px 16px; color: var(--ink); background: var(--white); }
+.text-field:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(83,20,111,.1); }
 .amount-field { display: flex; align-items: center; border: 2px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--white); transition: .2s ease; }
 .amount-field:focus-within { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(83, 20, 111, .10); }
 .amount-field.invalid { border-color: #bd2c2c; }
@@ -81,6 +95,19 @@ tbody tr:hover { background: #fdfbfe; }
 .notice { display: flex; align-items: flex-start; gap: 11px; margin-top: 20px; padding: 14px 16px; border-radius: 14px; background: var(--green-soft); color: #31533d; }
 .notice > span { flex: 0 0 auto; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: white; background: var(--green); font-size: .8rem; font-weight: 850; }
 .notice p { margin: 0; font-size: .85rem; line-height: 1.55; }
+.rahn-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.rahn-meta span { min-width: 160px; padding: 11px 14px; border-radius: 12px; background: var(--purple-soft); }
+.rahn-meta small,.rahn-meta strong { display: block; }
+.rahn-meta small { color: var(--muted); font-size: .72rem; }
+.rahn-meta strong { margin-top: 2px; color: var(--purple); }
+.scheme-switch { display: inline-flex; gap: 5px; margin-bottom: 16px; padding: 5px; border-radius: 13px; background: var(--purple-soft); }
+.scheme-button { width: auto; padding: 10px 16px; color: var(--muted); background: transparent; box-shadow: none; }
+.scheme-button:hover { transform: none; box-shadow: none; }
+.scheme-button.active { color: var(--white); background: var(--purple); box-shadow: 0 5px 14px rgba(83,20,111,.18); }
+.scheme-title { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 10px; }
+.scheme-title span { color: var(--purple); font-weight: 850; }
+.scheme-title small { color: var(--muted); text-align: right; }
+.total-row td { color: var(--ink)!important; background: #fff8d9; font-weight: 900!important; }
 footer { padding-top: 24px; color: #8a838d; font-size: .78rem; text-align: center; }
 
 @media (max-width: 760px) {
@@ -90,6 +117,8 @@ footer { padding-top: 24px; color: #8a838d; font-size: .78rem; text-align: cente
   .brand p { font-size: .69rem; }
   .brand h1 { font-size: 1.05rem; }
   .calculator { grid-template-columns: 1fr; gap: 25px; border-radius: 20px; padding: 25px 20px; }
+  .akad-tabs { grid-template-columns: 1fr; gap: 8px; }
+  .akad-tab { padding: 11px 13px; }
   .intro h2 { font-size: 1.65rem; }
   .intro p { font-size: .91rem; }
   .results { border-radius: 20px; padding: 24px 16px; }
@@ -105,6 +134,12 @@ footer { padding-top: 24px; color: #8a838d; font-size: .78rem; text-align: cente
   .monthly strong { display: block; margin-top: 2px; color: var(--green); font-size: 1.12rem; }
   .card-row { display: flex; justify-content: space-between; gap: 15px; margin-top: 8px; font-size: .82rem; }
   .card-row strong { text-align: right; }
+  .scheme-switch { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+  .scheme-button { padding: 10px 7px; font-size: .78rem; }
+  .scheme-title { align-items: flex-start; flex-direction: column; }
+  .scheme-title small { text-align: left; }
+  #rahn-results .table-wrap { display: block; }
+  #rahn-results table { min-width: 650px; }
 }
 
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }

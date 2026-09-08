@@ -1,78 +1,9 @@
-<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#54156f">
-  <meta name="description" content="Simulasi pembiayaan murabahah Koperasi Kossuma Kota Bekasi.">
-  <title>Simulasi Murabahah | Kossuma</title>
-  <link rel="icon" href="assets/logo-kossuma.png">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <main class="page-shell">
-    <header class="brand">
-      <img src="assets/logo-kossuma.png" alt="Logo Koperasi Kossuma">
-      <div>
-        <p>Koperasi Kossuma Kota Bekasi</p>
-        <h1>Simulasi Pembiayaan Murabahah</h1>
-      </div>
-    </header>
-
-    <section class="calculator" aria-labelledby="form-title">
-      <div class="intro">
-        <span class="eyebrow">Hitung cicilanmu</span>
-        <h2 id="form-title">Rencanakan pembiayaan dengan mudah</h2>
-        <p>Masukkan nominal harga barang untuk melihat estimasi pembayaran pada setiap pilihan jangka waktu.</p>
-      </div>
-
-      <form id="simulation-form" novalidate>
-        <label for="amount">Nominal pembiayaan</label>
-        <div class="amount-field" id="amount-wrap">
-          <span>Rp</span>
-          <input id="amount" name="amount" type="text" inputmode="numeric" autocomplete="off" placeholder="10.000.000" aria-describedby="amount-help amount-error">
-        </div>
-        <div class="field-meta">
-          <small id="amount-help">Contoh: Rp10.000.000</small>
-          <small id="amount-error" class="error" role="alert"></small>
-        </div>
-        <button type="submit">Lihat Simulasi</button>
-      </form>
-    </section>
-
-    <section class="results" id="results" aria-live="polite" hidden>
-      <div class="results-heading">
-        <div>
-          <span class="eyebrow">Hasil simulasi</span>
-          <h2>Perkiraan Pembayaran</h2>
-        </div>
-        <div class="summary">
-          <span>Harga barang</span>
-          <strong id="summary-amount">Rp0</strong>
-        </div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Jangka waktu</th>
-              <th scope="col">Pokok pembiayaan</th>
-              <th scope="col">Margin</th>
-              <th scope="col">Total pembayaran</th>
-              <th scope="col">Cicilan / bulan</th>
-            </tr>
-          </thead>
-          <tbody id="result-body"></tbody>
-        </table>
-      </div>
-
-      <div class="tenor-cards" id="tenor-cards"></div>
-
-    </section>
-
-    <footer>© <span id="year"></span> Koperasi Kossuma Kota Bekasi</footer>
-  </main>
-  <script src="script.js"></script>
-</body>
-</html>
+<!doctype html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#54156f"><title>Simulasi Pembiayaan | Kossuma</title><link rel="icon" href="assets/logo-kossuma.png"><link rel="stylesheet" href="style.css"></head><body>
+<main class="page-shell"><header class="brand"><img src="assets/logo-kossuma.png" alt="Logo Koperasi Kossuma"><div><p>Koperasi Syariah Serba Usaha Salimah</p><h1>Simulasi Pembiayaan</h1></div></header>
+<nav class="akad-tabs" aria-label="Pilih jenis akad"><button class="akad-tab active" type="button" data-akad="murabahah"><span class="tab-icon">M</span><span><strong>Murabahah</strong><small>Jual beli</small></span></button><button class="akad-tab" type="button" data-akad="qardhul"><span class="tab-icon">Q</span><span><strong>Qardhul Hasan</strong><small>Biaya pendidikan</small></span></button><button class="akad-tab" type="button" data-akad="rahn"><span class="tab-icon">R</span><span><strong>Rahn</strong><small>Gadai syariah</small></span></button></nav>
+<section class="calculator"><div class="intro"><span class="eyebrow" id="intro-eyebrow">Akad jual beli</span><h2 id="form-title">Simulasi Murabahah</h2><p id="intro-description">Masukkan harga barang untuk melihat estimasi pembayaran pada setiap pilihan jangka waktu.</p></div>
+<form id="simulation-form" novalidate><div class="field" id="item-field" hidden><label for="item-name">Barang yang digadai <span>(opsional)</span></label><input class="text-field" id="item-name" type="text" placeholder="Contoh: Logam Mulia 5 gram"></div><label for="amount" id="amount-label">Harga barang</label><div class="amount-field" id="amount-wrap"><span>Rp</span><input id="amount" type="text" inputmode="numeric" placeholder="10.000.000"></div><div class="field-meta"><small id="amount-help">Contoh: Rp10.000.000</small><small id="amount-error" class="error"></small></div><div class="field" id="tenor-field" hidden><label for="rahn-tenor">Masa Rahn</label><select id="rahn-tenor" class="text-field"><option value="2">2 bulan</option><option value="3">3 bulan</option><option value="4" selected>4 bulan</option><option value="5">5 bulan</option><option value="6">6 bulan</option><option value="10">10 bulan</option><option value="12">12 bulan</option></select></div><button type="submit">Lihat Simulasi</button></form></section>
+<section class="results" id="results" hidden><div class="results-heading"><div><span class="eyebrow">Hasil simulasi</span><h2 id="result-title">Perkiraan Pembayaran</h2></div><div class="summary"><span id="summary-label">Harga barang</span><strong id="summary-amount">Rp0</strong></div></div>
+<div id="standard-results"><div class="table-wrap"><table><thead><tr><th>Jangka waktu</th><th>Pokok pembiayaan</th><th>Margin</th><th>Total pembayaran</th><th>Cicilan / bulan</th></tr></thead><tbody id="result-body"></tbody></table></div><div class="tenor-cards" id="tenor-cards"></div></div>
+<div id="rahn-results" hidden><div class="rahn-meta" id="rahn-meta"></div><div class="scheme-switch"><button type="button" class="scheme-button active" data-scheme="installment">Pokok diangsur</button><button type="button" class="scheme-button" data-scheme="ujrah-only">Ujrah bulanan</button></div><div id="scheme-installment" class="scheme-panel"></div><div id="scheme-ujrah-only" class="scheme-panel" hidden></div></div></section>
+<footer>© <span id="year"></span> Koperasi Kossuma Kota Bekasi</footer></main><script src="script.js"></script></body></html>
