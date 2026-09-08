@@ -28,7 +28,7 @@ function formatInput(value) {
 function calculate(amount, tenor) {
   const margin = Math.round(amount * MONTHLY_MARGIN * tenor);
   const total = amount + margin;
-  const monthly = Math.ceil(total / tenor);
+  const monthly = Math.ceil((total / tenor) / 1000) * 1000;
   return { margin, total, monthly };
 }
 
